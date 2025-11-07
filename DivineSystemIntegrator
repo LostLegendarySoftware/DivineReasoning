@@ -1,0 +1,18 @@
+class DivineSystemIntegrator:
+    def __init__(self):
+        # ... [same as before]
+
+        # Instead of CommunicationBridge, we use DivineReasoner
+        self.reasoner = DivineReasoner(self.systems)
+
+    def ask_question(self, question):
+        # ... [same as before]
+
+        # Use the reasoner to get an answer
+        unified_answer = self.reasoner.reason_about_question(question)
+
+        return {
+            'answer': unified_answer,
+            'source': 'divine_intelligence',
+            'certainty': random.uniform(0.7, 0.99)
+        }

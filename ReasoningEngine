@@ -1,0 +1,44 @@
+class ReasoningEngine:
+    def __init__(self):
+        self.kb = KnowledgeBase()
+        self.math = MathReasoner()
+        self.setup_knowledge_base()
+
+    def setup_knowledge_base(self):
+        # Add some initial facts and rules
+        self.kb.add_fact("it is raining")
+        self.kb.add_rule(["it is raining"], "you should bring an umbrella")
+        # ... more initial facts and rules
+
+    def ask(self, question):
+        # First, try math reasoner
+        math_answer = self.math.solve(question)
+        if math_answer:
+            return math_answer
+
+        # Otherwise, try to convert the question to a fact and query the KB
+        # We'll use a simple conversion: remove question words and add a question mark?
+        # But note: our KB has facts as statements, not questions.
+
+        # For yes/no questions, we can convert the question to a fact and check.
+        # Example: "Is the sky blue?" -> "the sky is blue"
+        # We'll handle a few patterns.
+
+        # If the question starts with "is", then we remove "is" and add the fact.
+        if question.lower().startswith("is "):
+            fact = question[3:].strip().replace('?', '') + "?"
+            if self.kb.query(fact):
+                return "Yes, that is true."
+            else:
+                return "I don't know."
+
+        # Similarly, we can handle "should" questions.
+        if question.lower().startswith("should "):
+            fact = question[7:].strip().replace('?', '') + "?"
+            if self.kb.query(fact):
+                return "Yes, you should."
+            else:
+                return "I don't know."
+
+        # If we cannot handle, return a default response.
+        return "I cannot answer that question."

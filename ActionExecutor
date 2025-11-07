@@ -1,0 +1,6 @@
+    self.actions = {
+        'answer_query': self.answer_query,
+        'solve_problem': self.solve_problem,
+        'generate_algorithm': self.generate_algorithm,
+        'refine_knowledge': self.default_action   # Change this to default_action
+    }

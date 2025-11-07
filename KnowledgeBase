@@ -1,0 +1,30 @@
+class KnowledgeBase:
+    def __init__(self):
+        self.facts = set()
+        self.rules = []  # list of (conditions, conclusion)
+
+    def add_fact(self, fact):
+        """Add a fact and trigger forward chaining."""
+        if fact not in self.facts:
+            self.facts.add(fact)
+            self.forward_chain()
+
+    def add_rule(self, conditions, conclusion):
+        """Add a rule."""
+        self.rules.append((conditions, conclusion))
+        # After adding a rule, we trigger forward chaining to see if we can derive new facts.
+        self.forward_chain()
+
+    def forward_chain(self):
+        """Apply forward chaining to derive new facts."""
+        new_facts = set()
+        for conditions, conclusion in self.rules:
+            if all(cond in self.facts for cond in conditions) and conclusion not in self.facts:
+                new_facts.add(conclusion)
+        if new_facts:
+            for fact in new_facts:
+                self.add_fact(fact)  # This will recursively forward chain
+
+    def query(self, fact):
+        """Check if a fact is in the KB."""
+        return fact in self.facts

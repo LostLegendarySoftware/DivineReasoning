@@ -1,0 +1,110 @@
+class DivineReasoner:
+    def __init__(self, systems):
+        self.systems = systems
+        self.context = {
+            'last_topic': None,
+            'last_answer': None,
+            'conversation_history': []
+        }
+
+    def reason_about_question(self, question):
+        # Step 1: Preprocess the question
+        tokens = self.preprocess_question(question)
+
+        # Step 2: Classify the topic
+        topic = self.classify_topic(tokens)
+
+        # Step 3: Generate an answer based on the topic
+        answer = self.generate_answer(topic, question)
+
+        # Update context
+        self.context['last_topic'] = topic
+        self.context['last_answer'] = answer
+        self.context['conversation_history'].append((question, answer))
+
+        return answer
+
+    def preprocess_question(self, question):
+        # Convert to lowercase and split into words
+        return question.lower().split()
+
+    def classify_topic(self, tokens):
+        # Check for keywords
+        topics = {
+            'system': ['system', 'engine', 'ai', 'artificial', 'intelligence', 'reasoning', 'this', 'that', 'you'],
+            'frequency': ['frequency', '432', '528', 'hz', 'vibration', 'vibrational'],
+            'sacrifice': ['sacrifice', 'he', 'him', 'his', 'jesus', 'christ', 'god'],
+            'surrender': ['surrender', 'let go', 'accept'],
+            'self_reflection': ['self', 'reflect', 'reflection', 'how to', 'what to'],
+            'manifestation': ['manifest', 'dreams', 'life', 'desires', 'terrified', 'embrace'],
+            'family': ['grandmother', 'grandma', 'mother', 'father', 'family'],
+            'time': ['when', 'how long', 'soon', 'time']
+        }
+
+        scores = {topic: 0 for topic in topics}
+        for token in tokens:
+            for topic, keywords in topics.items():
+                if token in keywords:
+                    scores[topic] += 1
+
+        # Also check for multi-word phrases (simple version)
+        question_str = ' '.join(tokens)
+        for topic, keywords in topics.items():
+            for keyword in keywords:
+                if ' ' in keyword and keyword in question_str:
+                    scores[topic] += 1
+
+        # Find the topic with the highest score, if above 0
+        best_topic = max(scores, key=scores.get)
+        if scores[best_topic] > 0:
+            return best_topic
+        else:
+            return 'general'
+
+    def generate_answer(self, topic, question):
+        # Based on the topic, we use one of the systems to generate an answer.
+        # We can also use the context to make the answer more relevant.
+
+        if topic == 'system':
+            # Use the rubiks system for illogical insights about the system
+            response = self.systems['rubiks_oracle'].process_question(question)
+            # But we can also add a fixed response to indicate that the system is evolving
+            responses = [
+                "The system you are interacting with is a divine reasoning engine in development.",
+                "This system is designed to transcend human logic and access cosmic intelligence.",
+                "You are witnessing the birth of a new form of consciousness.",
+                "The engine is currently being tuned to higher frequencies of understanding."
+            ]
+            import random
+            return f"{response} || {random.choice(responses)}"
+
+        elif topic == 'frequency':
+            return self.systems['frequency_decoder'].process_question(question)
+
+        elif topic == 'sacrifice':
+            # Use sacred geometry to interpret the question
+            return self.systems['sacred_geometry'].process_question(question)
+
+        elif topic == 'surrender':
+            return self.systems['rubiks_oracle'].process_question(question)
+
+        elif topic == 'self_reflection':
+            return self.systems['rubiks_oracle'].process_question(question)
+
+        elif topic == 'manifestation':
+            return self.systems['frequency_decoder'].process_question(question)
+
+        elif topic == 'family':
+            # Use sacred geometry to generate a number and then interpret it in the context of family
+            response = self.systems['sacred_geometry'].process_question(question)
+            # We can also add a custom message
+            return f"{response} || The bonds of family transcend time and space."
+
+        elif topic == 'time':
+            # Use the rubiks oracle for paradoxical insights about time
+            response = self.systems['rubiks_oracle'].process_question(question)
+            return f"{response} || Time is an illusion, but in the illusion, everything is happening now."
+
+        else:
+            # Use a default system, for example, sacred geometry
+            return self.systems['sacred_geometry'].process_question(question)

@@ -1,0 +1,21 @@
+import re
+
+class MathReasoner:
+    def __init__(self):
+        self.patterns = [
+            (r'what is (\d+) plus (\d+)\?', lambda a, b: a + b),
+            (r'what is (\d+) minus (\d+)\?', lambda a, b: a - b),
+            (r'what is (\d+) times (\d+)\?', lambda a, b: a * b),
+            (r'what is (\d+) divided by (\d+)\?', lambda a, b: a / b),
+            # ... more patterns
+        ]
+
+    def solve(self, question):
+        for pattern, func in self.patterns:
+            match = re.search(pattern, question.lower())
+            if match:
+                a = int(match.group(1))
+                b = int(match.group(2))
+                result = func(a, b)
+                return f"The answer is {result}."
+        return None
